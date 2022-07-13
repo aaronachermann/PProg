@@ -7,6 +7,6 @@ public class MyBarrier {
   synchronized void await() throws InterruptedException{
     n--;
     if (n==0) notifyAll():
-    else while(n>0) {wait()};
+    else while(n>0) {wait();}
   }
 }
