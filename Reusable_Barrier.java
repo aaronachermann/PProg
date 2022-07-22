@@ -1,23 +1,15 @@
-
-class MyCyclicBarrier {
-	private final Runnable barrierAction;
-	private final int n; // total number ofthreads
-	private int awaitThreads; // number of threads stil needed to reach the barrier
-
-	public MyCyclicBarrier(int n, Runnable barrierAction) {
-		this.n = n;
-		this.awaitThreads = n;
-		this.barrierAction = barrierAction;
-	}
-
-	public synchronized void await() throws InterruptedException {
-		this.awaitThreads--;
-		if (this.awaitThreads > 0) {
-			this.wait();
-		} else {
-			this.awaitThreads = this.n;
-			this.barrierAction.run();
-			this.notifyAll();
-		}
-	}
-}
+mutex=1; barrier1=0; barrier2=1; count=0
+     acquire(mutex)
+        count++;
+        if (count==n)
+           acquire(barrier2); release(barrier1)
+     release(mutex)
+     acquire(barrier1); release(barrier1);
+     // barrier1 = 1 for all processes, barrier2 = 0 for all processes
+     acquire(mutex)
+        count--;
+        if (count==0)
+           acquire(barrier1); release(barrier2)
+     release(mutex)
+     acquire(barrier2); release(barrier2)
+     // barrier2 = 1 for all processes, barrier1 = 0 for all processes
