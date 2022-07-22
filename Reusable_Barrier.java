@@ -2,20 +2,20 @@
 class MyCyclicBarrier {
 	private final Runnable barrierAction;
 	private final int n; // total number ofthreads
-	private int awaitParties; // number of threads stil needed to reach the barrier
+	private int reachThreads; // number of threads stil needed to reach the barrier
 
 	public MyCyclicBarrier(int n, Runnable barrierAction) {
 		this.n = n;
-		this.awaitParties = n;
+		this.reachThreads = n;
 		this.barrierAction = barrierAction;
 	}
 
 	public synchronized void await() throws InterruptedException {
-		this.awaitParties--;
-		if (this.awaitParties > 0) {
+		this.reachThreads--;
+		if (this.reachThreads > 0) {
 			this.wait();
 		} else {
-			this.awaitParties = this.n;
+			this.reachThreads = this.n;
 			this.barrierAction.run();
 			this.notifyAll();
 		}
