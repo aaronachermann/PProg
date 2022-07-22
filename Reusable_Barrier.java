@@ -1,3 +1,5 @@
+//acquire(x) --> decrement x
+//release(x) --> increment x
 mutex=1; barrier1=0; barrier2=1; count=0
      acquire(mutex)
         count++;
@@ -10,6 +12,6 @@ mutex=1; barrier1=0; barrier2=1; count=0
         count--;
         if (count==0)
            acquire(barrier1); release(barrier2)
-     release(mutex)
+     release(mutex)                             
      acquire(barrier2); release(barrier2)
      // barrier2 = 1 for all processes, barrier1 = 0 for all processes
