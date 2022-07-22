@@ -1,29 +1,23 @@
-public class Reusable_Barrier {
-    final int n; //number of threads
-    private int i = 0;
-    private boolean holding = false;
 
-    public void synchronized await(){
-        while(holding){
-            wait();
-        }
+class MyCyclicBarrier {
+	private final Runnable barrierAction;
+	private final int totalParties; // total number ofthreads
+	private int awaitParties; // number of threads stil needed to reach the barrier
 
-        i++;
+	public MyCyclicBarrier(int parties, Runnable barrierAction) {
+		this.totalParties = parties;
+		this.awaitParties = parties;
+		this.barrierAction = barrierAction;
+	}
 
-        while(i < n && !holding){
-            wait();
-        }
-        if(i==n){
-            holding = true;
-            notifyAll();
-        }
-        i--;
-
-        if(i==0){
-            holding = false;
-            notifyAll();
-        }
-
-
-    }
+	public synchronized void await() throws InterruptedException {
+		this.awaitParties--;
+		if (this.awaitParties > 0) {
+			this.wait();
+		} else {
+			this.awaitParties = this.totalParties;
+			this.barrierAction.run();
+			this.notifyAll();
+		}
+	}
 }
