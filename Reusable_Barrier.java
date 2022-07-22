@@ -1,12 +1,12 @@
 
 class MyCyclicBarrier {
 	private final Runnable barrierAction;
-	private final int totalParties; // total number ofthreads
+	private final int n; // total number ofthreads
 	private int awaitParties; // number of threads stil needed to reach the barrier
 
-	public MyCyclicBarrier(int parties, Runnable barrierAction) {
-		this.totalParties = parties;
-		this.awaitParties = parties;
+	public MyCyclicBarrier(int n, Runnable barrierAction) {
+		this.n = n;
+		this.awaitParties = n;
 		this.barrierAction = barrierAction;
 	}
 
@@ -15,7 +15,7 @@ class MyCyclicBarrier {
 		if (this.awaitParties > 0) {
 			this.wait();
 		} else {
-			this.awaitParties = this.totalParties;
+			this.awaitParties = this.n;
 			this.barrierAction.run();
 			this.notifyAll();
 		}
